@@ -91,7 +91,8 @@
         android:contentDescription="@string/description_post_likes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierButtom"
-        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+        app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/likes"
@@ -112,7 +113,8 @@
         android:contentDescription="@string/description_post_shares"
         app:layout_constraintStart_toEndOf="@id/likes"
         app:layout_constraintTop_toBottomOf="@id/barrierButtom"
-        app:srcCompat="@drawable/ic_baseline_share_24" />
+        app:srcCompat="@drawable/ic_baseline_share_24"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/shares"
@@ -133,7 +135,8 @@
         android:contentDescription="@string/description_post_views"
         app:layout_constraintEnd_toStartOf="@id/views"
         app:layout_constraintTop_toBottomOf="@id/barrierButtom"
-        app:srcCompat="@drawable/ic_baseline_visibility_24" />
+        app:srcCompat="@drawable/ic_baseline_visibility_24"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/views"
