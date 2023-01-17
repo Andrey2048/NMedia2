@@ -7,7 +7,7 @@
     android:minWidth="@dimen/avatar_size"
     android:minHeight="@dimen/avatar_size"
     android:padding="@dimen/common_spacing"
-    tools:context=".MainActivity">
+    tools:context=".actitvity.MainActivity">
 
 
     <ImageView
