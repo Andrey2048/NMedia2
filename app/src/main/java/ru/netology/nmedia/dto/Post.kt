@@ -4,7 +4,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 data class Post(
-    val id: Int,
+    val id: Long,
     val author: String,
     val published: String,
     val content: String,
