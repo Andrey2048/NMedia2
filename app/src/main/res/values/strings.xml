@@ -8,6 +8,7 @@
     <string name="description_post_views">Post views</string>
     <string name="post_text">Post text…</string>
     <string name="description_post_save">Save post</string>
+    <string name="description_post_cancel_edition">Cancel editing</string>
     <string name="error_empty_post">Post can\'t be empty</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_remove">Remove</string>
