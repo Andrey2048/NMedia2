@@ -12,5 +12,6 @@
     <string name="error_empty_post">Post can\'t be empty</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_remove">Remove</string>
+    <string name="edit_message">Edit message</string>
 
 </resources>

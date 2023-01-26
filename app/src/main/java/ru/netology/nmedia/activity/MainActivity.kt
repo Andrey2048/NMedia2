@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                 setText(post.content)
             }
             binding.cancelEdit.visibility = View.VISIBLE
+
         }
 
         binding.save.setOnClickListener {
@@ -77,7 +78,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cancelEdit.setOnClickListener {
+            binding.cancelEdit.visibility = View.GONE
             viewModel.cancelEdition()
+            binding.content.setText("")
+            binding.content.clearFocus()
         }
     }
 
