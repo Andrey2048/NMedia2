@@ -14,4 +14,6 @@
     <string name="menu_remove">Удалить</string>
     <string name="description_post_cancel_edition">Отменить редактирование</string>
     <string name="edit_message">Редактирование сообщения</string>
+    <string name="description_post_like">Нравится</string>
+    <string name="description_post_share">Поделиться</string>
 </resources>
