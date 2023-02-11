@@ -14,7 +14,6 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:background="@android:color/transparent"
-        android:hint="@string/add_post"
         />
 
     <com.google.android.material.bottomappbar.BottomAppBar
