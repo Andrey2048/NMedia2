@@ -25,6 +25,28 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".activity.IntentHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.NewPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EditPostActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

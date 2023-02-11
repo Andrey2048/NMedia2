@@ -16,4 +16,7 @@
     <string name="edit_message">Редактирование сообщения</string>
     <string name="description_post_like">Нравится</string>
     <string name="description_post_share">Поделиться</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="error_empty_content">Пусто</string>
+    <string name="add_post">Создать пост</string>
 </resources>
