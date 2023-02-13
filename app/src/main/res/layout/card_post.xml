@@ -78,7 +78,8 @@
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:barrierMargin="@dimen/common_spacing"
-        app:constraint_referenced_ids="content" />
+        app:constraint_referenced_ids="content, video"
+        app:layout_constraintTop_toBottomOf="@id/video" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"
@@ -115,6 +116,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierBottom"
         tools:text="13" />
+
+    <VideoView
+        android:id="@+id/video"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginVertical="@dimen/common_spacing"
+        android:background="@mipmap/videobanner_background"
+        android:clickable="true"
+        android:focusable="auto"
+        android:foreground="@drawable/videobanner_foreground"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        tools:layout_editor_absoluteX="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

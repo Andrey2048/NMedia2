@@ -1,6 +1,7 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.launch
 import androidx.activity.viewModels
@@ -36,6 +37,14 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onLike(post: Post) {
                     viewModel.likeById(post.id)
+                }
+
+                override fun onVideoPlay(post: Post) {
+                    val intent = Intent(Intent.ACTION_VIEW).apply{
+                        data = Uri.parse(post.video)
+                    }
+                    startActivity(intent)
+
                 }
 
                 override fun onRemove(post: Post) {

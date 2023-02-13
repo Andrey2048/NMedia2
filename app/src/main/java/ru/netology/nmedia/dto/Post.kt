@@ -8,6 +8,7 @@ data class Post(
     val author: String,
     val published: String,
     val content: String,
+    val video: String?,
     var likedByMe: Boolean,
     var likes: Int,
     var shares: Int,

@@ -19,4 +19,5 @@
     <string name="chooser_share_post">Поделиться</string>
     <string name="error_empty_content">Пусто</string>
     <string name="add_post">Создать пост</string>
+    <string name="play_video">Смотреть видео</string>
 </resources>

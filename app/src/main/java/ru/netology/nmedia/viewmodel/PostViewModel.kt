@@ -13,6 +13,7 @@ private val empty = Post(
     author = "",
     likedByMe = false,
     published = "",
+    video = null,
     likes = 0,
     shares = 0,
     views = 0
@@ -41,10 +42,10 @@ class PostViewModel : ViewModel() {
         if (edited.value?.content == text) return
         edited.value = edited.value?.copy(content = text)
     }
-
-    fun cancelEdition(){
-        edited.value = empty
-     }
+//
+//    fun cancelEdition(){
+//        edited.value = empty
+//     }
 
     fun likeById(id: Long) = repository.likeById(id)
     fun shareById(id: Long) = repository.shareById(id)
