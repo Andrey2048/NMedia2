@@ -4,29 +4,27 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
-import ru.netology.nmedia.dto.Post
 
-class EditPostResultContract : ActivityResultContract<Post, Post?>() {
+class EditPostResultContract : ActivityResultContract<String, String>() {
 
-    var inputPost: Post? = null
 
-    override fun createIntent(context: Context, input: Post): Intent {
-        inputPost = input
+    override fun createIntent(context: Context, input: String): Intent {
+
         val intent = Intent(context, EditPostActivity::class.java).apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, input.content)
-            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, input)
         }
         return intent
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Post? {
+    override fun parseResult(resultCode: Int, intent: Intent?): String {
+        val resultNullable: String?
+        val result: String
         if (resultCode == Activity.RESULT_OK) {
-            val str = intent?.getStringExtra(Intent.EXTRA_TEXT)
-            val rezPost = inputPost?.copy(content = str.toString())
-            return rezPost
+            resultNullable = intent?.getStringExtra(Intent.EXTRA_TEXT)
         } else {
-            return null
+            resultNullable = null
         }
+        result = resultNullable ?: ""
+        return result
     }
 }

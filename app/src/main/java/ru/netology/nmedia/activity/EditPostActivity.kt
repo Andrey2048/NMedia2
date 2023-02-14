@@ -14,9 +14,6 @@ class EditPostActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         intent?.let {
-            if (it.action != Intent.ACTION_SEND) {
-                return@let
-            }
             val text = it.getStringExtra(Intent.EXTRA_TEXT)
             binding.edit.text = Editable.Factory.getInstance().newEditable(text)
         }

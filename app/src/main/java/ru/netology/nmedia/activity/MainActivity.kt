@@ -24,14 +24,15 @@ class MainActivity : AppCompatActivity() {
         val adapter = PostsAdapter(
             object : OnInteractionListener {
                 override fun onEdit(post: Post) {
-                    editPostLauncher.launch(post)
+                    editPostLauncher.launch(post.content)
+//                    editPostLauncher.launch(post)
                     viewModel.edit(post)
                 }
 
                 val editPostLauncher =
                     registerForActivityResult(EditPostResultContract()) { result ->
                         result ?: return@registerForActivityResult
-                        viewModel.changeContent(result.content)
+                        viewModel.changeContent(result)
                         viewModel.save()
                     }
 
@@ -40,11 +41,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onVideoPlay(post: Post) {
-                    val intent = Intent(Intent.ACTION_VIEW).apply{
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
                         data = Uri.parse(post.video)
                     }
                     startActivity(intent)
-
                 }
 
                 override fun onRemove(post: Post) {
