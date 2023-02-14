@@ -117,17 +117,16 @@
         app:layout_constraintTop_toBottomOf="@id/barrierBottom"
         tools:text="13" />
 
-    <VideoView
-        android:id="@+id/video"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginVertical="@dimen/common_spacing"
-        android:background="@mipmap/videobanner_background"
-        android:clickable="true"
-        android:focusable="auto"
-        android:foreground="@drawable/videobanner_foreground"
-        app:layout_constraintTop_toBottomOf="@id/content"
-        tools:layout_editor_absoluteX="16dp" />
-
+        <ImageView
+            android:id="@+id/video"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginVertical="@dimen/common_spacing"
+            android:background="@mipmap/videobanner_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/play_video"
+            android:foreground="@drawable/videobanner_foreground"
+            app:layout_constraintTop_toBottomOf="@id/content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
