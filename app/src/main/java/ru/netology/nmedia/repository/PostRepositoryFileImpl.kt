@@ -13,7 +13,6 @@ class PostRepositoryFileImpl(
     private val gson = Gson()
     private val type = TypeToken.getParameterized(List::class.java, Post::class.java).type
     private val filename = "posts.json"
-    private var nextId = 1L
     private var posts = emptyList<Post>()
     private val data = MutableLiveData(posts)
 
@@ -27,8 +26,10 @@ class PostRepositoryFileImpl(
         } else {
             sync()
         }
-    }
 
+    }
+    // nextId должен учитывать имеющиеся уже посты
+    private var nextId = if (posts.isNotEmpty()) posts.maxOf{ it.id } + 1L else 1L
     override fun getAll(): LiveData<List<Post>> = data
 
     override fun save(post: Post) {
@@ -36,6 +37,8 @@ class PostRepositoryFileImpl(
             posts = listOf(
                 post.copy(
                     id = nextId++,
+                    //четным постам добавляем ссылку на видео
+                    video = if(nextId % 2 == 0L) "https://www.youtube.com/watch?v=7kcfYIfB8Xo" else null,
                     author = "Me",
                     likedByMe = false,
                     published = "now"
