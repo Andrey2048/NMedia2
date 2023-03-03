@@ -75,27 +75,12 @@ class ViewPostFragment : Fragment() {
             override fun onViewPost(post: Post) {}
         }
         )
+        /* Передача номера поста и выбор этого самого поста */
         val postId = requireArguments().getString("postId")?.toLong()
-
         viewModel.data.observe(viewLifecycleOwner) { posts ->
-//            val post:Post = posts.find {it.id == postId}!!
-            val postNullable:Post? = posts.find {it.id == postId}
-            if (postNullable != null) {
-                val post = posts.find { it.id == postId }!!
-                viewHolder.bind(post)
-            } else findNavController().navigateUp()
+            val post = posts.find { it.id == postId }
+            post?.let { viewHolder.bind(it) }
         }
-
         return binding.root
-
-///* Передача номера поста и выбор этого самого поста */
-//        val postId = arguments?.getString("postId")?.toLong()
-//
-//        viewModel.data.observe(viewLifecycleOwner) { posts ->
-//            val post = posts!!.find {
-//                it.id == postId
-//            }
-///*************************************************/
-
     }
 }
