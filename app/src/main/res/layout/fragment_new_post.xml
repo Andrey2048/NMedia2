@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:gravity="start|top"
         android:hint="@string/edit_message"
-        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
         android:inputType="textMultiLine"
         tools:text="@sample/posts.json/data/content"/>
 
