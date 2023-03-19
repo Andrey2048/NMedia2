@@ -5,15 +5,13 @@ import java.text.DecimalFormat
 
 data class Post(
     val id: Long,
-    val author: String,
-    val published: String,
+    var author: String,
     val content: String,
-    val video: String?,
-    var likedByMe: Boolean,
-    var likes: Int,
-    var shares: Int,
-    var views: Int
+    var published: String,
+    val likedByMe: Boolean,
+    val likes: Int = 0,
 )
+
 
 fun countView(n: Int): String {
     var df = DecimalFormat("#.#K")

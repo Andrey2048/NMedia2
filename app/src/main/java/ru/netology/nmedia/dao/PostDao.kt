@@ -14,12 +14,14 @@ interface PostDao {
     @Insert
     fun insert(post: PostEntity)
 
+    @Insert
+    fun insert(posts: List<PostEntity>)
 
     @Query("UPDATE PostEntity SET content = :content WHERE id = :id")
     fun updateContentById(id: Long, content: String)
 
-    fun save(post: PostEntity) = if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
-
+    fun save(post: PostEntity) =
+        if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
 
     @Query("""
         UPDATE PostEntity SET
@@ -31,7 +33,4 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     fun removeById(id: Long)
-
-    @Query("UPDATE PostEntity SET  shares = shares + 1 WHERE id = :id ")
-    fun shareById(id: Long)
 }
