@@ -26,7 +26,7 @@ class FeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
-
+        val mySwipeRefreshLayout = binding.swiperefresh
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
@@ -67,7 +67,11 @@ class FeedFragment : Fragment() {
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
-
+        mySwipeRefreshLayout.setOnRefreshListener{
+            mySwipeRefreshLayout.isRefreshing = true
+            viewModel.loadPosts()
+            mySwipeRefreshLayout.isRefreshing = false
+        }
         return binding.root
     }
 }

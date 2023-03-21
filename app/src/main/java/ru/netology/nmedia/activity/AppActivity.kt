@@ -12,6 +12,8 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
+//
+//    val mySwipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         }
 
         checkGoogleApiAvailability()
+
+
     }
 
     private fun checkGoogleApiAvailability() {
