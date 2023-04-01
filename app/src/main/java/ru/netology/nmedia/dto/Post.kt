@@ -6,6 +6,7 @@ import java.text.DecimalFormat
 data class Post(
     val id: Long,
     var author: String,
+    var authorAvatar: String,
     val content: String,
     var published: String,
     val likedByMe: Boolean,
