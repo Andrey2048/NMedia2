@@ -11,6 +11,7 @@ data class Post(
     var published: String,
     val likedByMe: Boolean,
     val likes: Int = 0,
+    val attachment: PostAttachment? = null
 )
 
 
@@ -33,3 +34,8 @@ fun countView(n: Int): String {
     }
     return out
 }
+
+data class PostAttachment(
+    val url: String,
+    val description: String
+)

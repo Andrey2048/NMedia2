@@ -78,7 +78,7 @@
             app:layout_constraintTop_toBottomOf="@id/barrierTop"
             tools:text="@sample/posts.json/data/content" />
 
-        <ImageView
+        <!--ImageView
             android:id="@+id/video"
             android:layout_width="match_parent"
             android:layout_height="120dp"
@@ -88,7 +88,18 @@
             android:contentDescription="@string/play_video"
             android:focusable="true"
             android:foreground="@drawable/videobanner_foreground"
-            app:layout_constraintTop_toBottomOf="@id/content" />
+            app:layout_constraintTop_toBottomOf="@id/content" /-->
+
+        <ImageView
+            android:id="@+id/attachmentImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/common_spacing"
+            android:clickable="true"
+            android:contentDescription="@string/attachment"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            tools:background="@mipmap/videobanner_background" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrierBottom"
@@ -96,8 +107,8 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:barrierMargin="@dimen/common_spacing"
-            app:constraint_referenced_ids="content, video"
-            app:layout_constraintTop_toBottomOf="@id/video"
+            app:constraint_referenced_ids="content,attachmentImage"
+            app:layout_constraintTop_toBottomOf="@id/attachmentImage"
             tools:layout_editor_absoluteX="16dp" />
 
         <com.google.android.material.button.MaterialButton

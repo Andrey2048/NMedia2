@@ -42,14 +42,23 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
-        val url = BASE_URL + "/avatars/${post.authorAvatar}"
         Glide.with(binding.avatar)
-            .load(url)
+            .load(BASE_URL + "/avatars/${post.authorAvatar}")
             .placeholder(R.drawable.ic_loading_100dp)
             .error(R.drawable.ic_error_100dp)
             .timeout(10_000)
             .circleCrop()
             .into(binding.avatar)
+
+        post.attachment?.let{
+            Glide.with(binding.attachmentImage)
+                .load(BASE_URL + "/images/${post.attachment.url}")
+                .centerCrop()
+                .placeholder(R.drawable.ic_loading_100dp)
+                .error(R.drawable.ic_error_100dp)
+                .timeout(10_000)
+                .into(binding.attachmentImage)
+        }
 
         binding.apply {
             author.text = post.author
