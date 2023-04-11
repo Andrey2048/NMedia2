@@ -58,6 +58,8 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
+
+//            if(state.error) Snackbar.make(requireView(),R.string.error_loading,Snackbar.LENGTH_LONG).show()
         }
 
         binding.retryButton.setOnClickListener {

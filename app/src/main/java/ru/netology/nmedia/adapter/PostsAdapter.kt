@@ -1,17 +1,19 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ru.netology.nmedia.BuildConfig.BASE_URL
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.countView
-import ru.netology.nmedia.repository.PostRepositoryImpl.Companion.BASE_URL
+
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -50,7 +52,7 @@ class PostViewHolder(
             .circleCrop()
             .into(binding.avatar)
 
-        post.attachment?.let{
+        post.attachment?.let {
             Glide.with(binding.attachmentImage)
                 .load(BASE_URL + "/images/${post.attachment.url}")
                 .centerCrop()
@@ -62,7 +64,7 @@ class PostViewHolder(
 
         binding.apply {
             author.text = post.author
-
+            attachmentImage.visibility = if (post.attachment != null) View.VISIBLE else View.GONE
             published.text = post.published
             content.text = post.content
             // в адаптере
