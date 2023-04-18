@@ -12,7 +12,7 @@ import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 
 private val empty = Post(
-    id = 0L, content = "", author = "", authorAvatar = "", likedByMe = false, likes = 10, published = ""
+    id = 0L, content = "", author = "", authorAvatar = "", likedByMe = false, likes = 0, published = ""
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
