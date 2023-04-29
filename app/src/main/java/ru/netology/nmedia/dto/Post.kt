@@ -9,8 +9,8 @@ data class Post(
     var authorAvatar: String,
     val content: String,
     var published: String,
-    val likedByMe: Boolean,
-    val likes: Int = 0,
+    var likedByMe: Boolean,
+    var likes: Int = 0,
     val attachment: PostAttachment? = null
 )
 
