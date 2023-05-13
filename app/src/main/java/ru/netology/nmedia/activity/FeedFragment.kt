@@ -27,7 +27,7 @@ class FeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
-//        val mySwipeRefreshLayout = binding.swiperefresh
+//        val myScroller = SmoothScroller()
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
@@ -69,12 +69,24 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
         }
 
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            println("new posts: $it")
+            if (it > 0) binding.newPosts.visibility = View.VISIBLE
+        }
+
+        binding.newPosts.setOnClickListener {
+            viewModel.makeVisible()
+            binding.list.smoothScrollToPosition(0)
+            binding.newPosts.visibility = View.GONE
+
+        }
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
         binding.swiperefresh.setOnRefreshListener {
             viewModel.refreshPosts()
+            println("Обновил посты")
         }
         return binding.root
     }

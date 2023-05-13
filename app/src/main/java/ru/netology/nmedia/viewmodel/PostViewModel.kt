@@ -4,8 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
@@ -40,8 +43,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
-    init {
-        loadPosts()
+    val newerCount: LiveData<Int> = data.switchMap {
+        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L).asLiveData(Dispatchers.Default)
     }
 
     fun loadPosts() = viewModelScope.launch {
@@ -98,24 +101,28 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _dataState.value = FeedModelState()
             } catch (e: Exception) {
                 _dataState.value = FeedModelState(error = true)
-
             }
         }
     }
 
+    fun makeVisible() {
+        viewModelScope.launch {
+            try {
+                repository.makeVisible()
+                _dataState.value = FeedModelState()
+            } catch (e: Exception) {
+                _dataState.value = FeedModelState(error = true)
+            }
+        }
+    }
 
     fun removeById(id: Long) {
         viewModelScope.launch {
             try {
-//                data.postValue(
-//                    data.value?.copy(posts = data.value?.posts.orEmpty()
-//                        .filter { it.id != id }
-//                _dataState.value = FeedModelState(refreshing = true)
                 repository.removeById(id)
                 _dataState.value = FeedModelState()
             } catch (e: Exception) {
                 _dataState.value = FeedModelState(error = true)
-
             }
         }
     }

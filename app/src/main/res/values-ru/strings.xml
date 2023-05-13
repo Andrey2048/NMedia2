@@ -29,4 +29,5 @@
     <string name="empty_posts">Постов ещё нет. Когда напишите, то он здесь появится</string>
     <string name="error_loading">Что-то пошло не так. Попробуйте еше раз позже</string>
     <string name="attachment">Приложение</string>
+    <string name="new_posts">Новые посты</string>
 </resources>
