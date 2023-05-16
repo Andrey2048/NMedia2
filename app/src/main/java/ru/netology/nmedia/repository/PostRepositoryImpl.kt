@@ -1,6 +1,11 @@
 package ru.netology.nmedia.repository
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import okio.IOException
 import ru.netology.nmedia.api.*
 import ru.netology.nmedia.dao.PostDao
@@ -13,7 +18,26 @@ import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-    override val data = dao.getAll().map(List<PostEntity>::toDto)
+    override val data = dao.getAll()
+        .map(List<PostEntity>::toDto)
+
+    override fun getNewerCount(id: Long): Flow<Int> = flow {
+        while (true) {
+            delay(20_000L)
+            println("total posts: $id")
+            val response = PostsApi.retrofitService.getNewer(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: emptyList()
+
+            println(response.body().toString())
+            emit(body.size)
+            dao.insert(body.toEntity().map { it.copy(isVisible = false) })
+
+        }
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
         try {
@@ -21,7 +45,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
         } catch (e: IOException) {
@@ -31,13 +54,13 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
+
     override suspend fun save(post: Post) {
         try {
             val response = PostsApi.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
@@ -54,9 +77,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             response.body() ?: throw ApiError(response.code(), response.message())
-
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -76,7 +97,14 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 if (!response.isSuccessful) {
                     throw ApiError(response.code(), response.message())
                 }
-                dao.insert(PostEntity.fromDto(response.body() ?: throw ApiError(response.code(), response.message())))
+                dao.insert(
+                    PostEntity.fromDto(
+                        response.body() ?: throw ApiError(
+                            response.code(),
+                            response.message()
+                        )
+                    )
+                )
 
             } else {
                 post.likedByMe = false
@@ -87,14 +115,30 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 if (!response.isSuccessful) {
                     throw ApiError(response.code(), response.message())
                 }
-                dao.insert(PostEntity.fromDto(response.body() ?: throw ApiError(response.code(), response.message())))
+                dao.insert(
+                    PostEntity.fromDto(
+                        response.body() ?: throw ApiError(
+                            response.code(),
+                            response.message()
+                        )
+                    )
+                )
             }
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }
+    }
 
-
+    override suspend fun makeVisible() {
+        try {
+            dao.makeVisible(data.value?.size?.toLong() ?: 0L)
+            println("data.value.size = " + data.value?.size)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 }

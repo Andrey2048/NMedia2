@@ -9,8 +9,12 @@ import ru.netology.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE isVisible = 1 ORDER BY id DESC")
     fun getAll(): LiveData<List<PostEntity>>
+
+
+    @Query("UPDATE PostEntity SET isVisible = 1 WHERE id > :id")
+    suspend fun makeVisible(id: Long)
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean
