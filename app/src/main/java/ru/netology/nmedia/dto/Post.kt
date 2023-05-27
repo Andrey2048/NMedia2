@@ -11,7 +11,7 @@ data class Post(
     var published: String,
     var likedByMe: Boolean,
     var likes: Int = 0,
-    val attachment: PostAttachment? = null
+    val attachment: PostAttachment?
 )
 
 
@@ -37,5 +37,8 @@ fun countView(n: Int): String {
 
 data class PostAttachment(
     val url: String,
-    val description: String
+    val type: AttachmentType
 )
+enum class AttachmentType{
+    IMAGE
+}

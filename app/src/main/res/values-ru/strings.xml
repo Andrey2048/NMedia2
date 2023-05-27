@@ -30,4 +30,10 @@
     <string name="error_loading">Что-то пошло не так. Попробуйте еше раз позже</string>
     <string name="attachment">Приложение</string>
     <string name="new_posts">Новые посты</string>
+    <string name="description_photo">Фото</string>
+    <string name="remove">Удалить фото</string>
+    <string name="description_select_photo">Выбрать фото</string>
+    <string name="description_take_photo">Сделать фото</string>
+    <string name="menu_save">Сохранить</string>
+    <string name="description_back">Обратно</string>
 </resources>

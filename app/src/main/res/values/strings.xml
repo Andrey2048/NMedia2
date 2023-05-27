@@ -29,5 +29,12 @@
     <string name="error_loading">Something went wrong. Try again later</string>
     <string name="attachment">Attachment</string>
     <string name="new_posts">"New posts "</string>
+    <string name="description_photo">Photo</string>
+    <string name="remove">Remove photo</string>
+    <string name="description_select_photo">Select photo</string>
+    <string name="description_take_photo">Take photo</string>
+    <string name="menu_save">Save</string>
+    <string name="description_back">Back</string>
+<!-- TODO: Remove or change this placeholder text -->
 
 </resources>
