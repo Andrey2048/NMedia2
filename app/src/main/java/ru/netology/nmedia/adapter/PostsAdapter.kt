@@ -105,7 +105,6 @@ class PostViewHolder(
                 view.findNavController().navigate(R.id.action_feedFragment_to_postAttachment,
                     Bundle().apply {
                     textArg = post.attachment?.url
-                        println(textArg)
                 })
             }
         }
