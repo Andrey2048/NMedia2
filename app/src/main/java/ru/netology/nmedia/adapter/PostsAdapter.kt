@@ -1,15 +1,18 @@
 package ru.netology.nmedia.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig.BASE_URL
 import ru.netology.nmedia.R
+import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.countView
@@ -54,7 +57,7 @@ class PostViewHolder(
 
         post.attachment?.let {
             Glide.with(binding.attachmentImage)
-                .load(BASE_URL + "/images/${post.attachment.url}")
+                .load(BASE_URL + "/media/${post.attachment.url}")
                 .centerCrop()
                 .placeholder(R.drawable.ic_loading_100dp)
                 .error(R.drawable.ic_error_100dp)
@@ -67,7 +70,6 @@ class PostViewHolder(
             attachmentImage.visibility = if (post.attachment != null) View.VISIBLE else View.GONE
             published.text = post.published
             content.text = post.content
-            // в адаптере
             like.isChecked = post.likedByMe
             like.text = countView(post.likes)
 
@@ -97,6 +99,13 @@ class PostViewHolder(
 
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
+            }
+
+            attachmentImage.setOnClickListener {view ->
+                view.findNavController().navigate(R.id.action_feedFragment_to_postAttachment,
+                    Bundle().apply {
+                    textArg = post.attachment?.url
+                })
             }
         }
     }
