@@ -35,6 +35,11 @@
     <string name="description_take_photo">Take photo</string>
     <string name="menu_save">Save</string>
     <string name="description_back">Back</string>
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="login">login</string>
+    <string name="password">password</string>
+    <string name="signout">Sign Out</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
+    <string name="auth_error">Authentification Error</string>
 
 </resources>
