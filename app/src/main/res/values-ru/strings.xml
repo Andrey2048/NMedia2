@@ -36,4 +36,10 @@
     <string name="description_take_photo">Сделать фото</string>
     <string name="menu_save">Сохранить</string>
     <string name="description_back">Обратно</string>
+    <string name="login">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="signout">Выйти</string>
+    <string name="signin">Войти</string>
+    <string name="signup">Зарегистрироваться</string>
+    <string name="auth_error">Ошибка аутентификации</string>
 </resources>

@@ -3,23 +3,32 @@ package ru.netology.nmedia.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.AuthModel
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +62,43 @@ class FeedFragment : Fragment() {
                 startActivity(shareIntent)
             }
         })
+
+        var currentMenuProvider: MenuProvider? = null
+        authViewModel.authLiveData.observe(viewLifecycleOwner) { authModel ->
+            
+            currentMenuProvider?.let(requireActivity()::removeMenuProvider)
+            requireActivity().addMenuProvider(/* provider = */ object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.auth_menu, menu)
+                    menu.setGroupVisible(R.id.authorized, authViewModel.isAuthorized)
+                    menu.setGroupVisible(R.id.unAuthorized, !authViewModel.isAuthorized)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.id.signIn -> {
+                            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+//                            AppAuth.getInstance().setUser(AuthModel(5, "x-token"))
+                            true
+                        }
+
+                        R.id.signUp -> {
+//                    TODO("Not yet implemented")
+                            AppAuth.getInstance().setUser(AuthModel(5, "x-token"))
+                            true
+                        }
+
+                        R.id.signOut -> {
+                            AppAuth.getInstance().removeUser()
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            }.also { currentMenuProvider = it }, viewLifecycleOwner)
+
+        }
         binding.list.adapter = adapter
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading

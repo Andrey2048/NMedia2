@@ -1,16 +1,16 @@
 package ru.netology.nmedia.repository
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.AuthModel
 import java.io.File
 
 interface PostRepository {
-    val data: LiveData<List<Post>>
+    val data: Flow<List<Post>>
     suspend fun getAll()
     suspend fun likeById(post: Post)
     suspend fun save(post: Post)
@@ -22,5 +22,5 @@ interface PostRepository {
         return PostsApi.retrofitService.upload(MultipartBody.Part.createFormData("file", file.name, file.asRequestBody()))
             .let { requireNotNull(it.body()) }
     }
-
+    suspend fun updateUser(login: String, pass: String): AuthModel
 }

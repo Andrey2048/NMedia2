@@ -5,11 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -24,18 +27,31 @@ private val empty = Post(
     content = "",
     author = "",
     authorAvatar = "",
+    authorId = 0L,
     likedByMe = false,
     likes = 0,
     published = "",
     attachment = null
 )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+
+    val data: LiveData<FeedModel> = AppAuth.getInstance()
+        .authStateFlow.flatMapLatest { (id, _) ->
+            repository.data
+                .map { posts ->
+                    posts.map { post -> post.copy(ownedByMe = post.authorId == id) }
+                }
+                .map(::FeedModel)
+        }
+        .asLiveData(Dispatchers.Default)
+
+
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
@@ -72,11 +88,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        edited.value?.let {post->
+        edited.value?.let { post ->
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
-                    _photoState.value?.let {photoModel ->
+                    _photoState.value?.let { photoModel ->
                         repository.saveWithAttachment(post, photoModel.file)
                     } ?: repository.save(post)
                     _dataState.value = FeedModelState()
