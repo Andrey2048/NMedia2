@@ -116,7 +116,7 @@ class FeedFragment : Fragment() {
         }
 
         viewModel.newerCount.observe(viewLifecycleOwner) {
-//            println("new posts: $it")
+            println("new posts: $it")
             if (it > 0) binding.newPosts.visibility = View.VISIBLE
         }
 

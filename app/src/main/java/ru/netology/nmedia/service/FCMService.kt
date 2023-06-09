@@ -1,6 +1,7 @@
 package ru.netology.nmedia.service
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -12,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import kotlin.random.Random
 
 
@@ -36,16 +38,43 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-
+        println(message.data)
         message.data[action]?.let {
            when (Action.valueOf(it)) {
               Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
            }
         }
+
+        val testInputPushValue = gson.fromJson(message.data[content], RecipientIdCheck::class.java)
+        println(testInputPushValue)
+        val myId = AppAuth.getInstance().authStateFlow.value.id
+        println("myId: $myId")
+        println("recipientId: ${testInputPushValue.recipientId}")
+        when {
+            testInputPushValue.recipientId == myId -> {
+                handleTestAction(testInputPushValue, "Персональная рассылка")
+            }
+
+            testInputPushValue.recipientId == null -> {
+                handleTestAction(testInputPushValue, "Массовая рассылка")
+            }
+
+            testInputPushValue.recipientId == 0L -> {
+                println("сервер считает, что у нас анонимная аутентификация, переотправляем токен")
+                AppAuth.getInstance().uploadPushToken()
+            }
+
+            testInputPushValue.recipientId != 0L -> {
+                println("сервер считает, что у на нашем устройстве другая аутентификация, переотправляем токен")
+                AppAuth.getInstance().uploadPushToken()
+            }
+        }
+
+
     }
 
     override fun onNewToken(token: String) {
-        println(token)
+        AppAuth.getInstance().uploadPushToken(token)
     }
 
     private fun handleLike(content: Like) {
@@ -70,6 +99,22 @@ class FCMService : FirebaseMessagingService() {
                 .notify(Random.nextInt(100_000), notification)
         }
     }
+
+
+    @SuppressLint("MissingPermission")
+    private fun handleTestAction(content: RecipientIdCheck, message: String) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(content.content)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(message)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
+    }
 }
 
 enum class Action {
@@ -83,3 +128,7 @@ data class Like(
     val postAuthor: String,
 )
 
+data class RecipientIdCheck(
+    val recipientId: Long? = null,
+    val content: String,
+)
