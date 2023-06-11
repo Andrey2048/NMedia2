@@ -12,6 +12,7 @@ data class PostEntity(
     val id: Long,
     val author: String,
     val authorAvatar: String,
+    val authorId: Long,
     val content: String,
     val published: String,
     val likedByMe: Boolean,
@@ -21,11 +22,31 @@ data class PostEntity(
     val isVisible: Boolean = true, //добавил
 
 ) {
-    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment)
+    fun toDto() = Post(
+        id = id,
+        author = author,
+        authorAvatar = authorAvatar,
+        authorId = authorId,
+        content = content,
+        published = published,
+        likedByMe = likedByMe,
+        likes = likes,
+        attachment = attachment
+    )
 
     companion object {
         fun fromDto(dto: Post) =
-            PostEntity(dto.id, dto.author, dto.authorAvatar, dto.content, dto.published, dto.likedByMe, dto.likes, dto.attachment)
+            PostEntity(
+                id = dto.id,
+                author = dto.author,
+                authorAvatar = dto.authorAvatar,
+                authorId = dto.authorId,
+                content = dto.content,
+                published = dto.published,
+                likedByMe = dto.likedByMe,
+                likes = dto.likes,
+                attachment = dto.attachment
+            )
 
     }
 }

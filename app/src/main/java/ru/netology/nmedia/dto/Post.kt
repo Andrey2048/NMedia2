@@ -5,13 +5,15 @@ import java.text.DecimalFormat
 
 data class Post(
     val id: Long,
-    var author: String,
-    var authorAvatar: String,
+    val author: String,
+    val authorAvatar: String,
+    val authorId: Long,
     val content: String,
     var published: String,
     var likedByMe: Boolean,
     var likes: Int = 0,
-    val attachment: PostAttachment?
+    val attachment: PostAttachment?,
+    val ownedByMe: Boolean = false
 )
 
 
