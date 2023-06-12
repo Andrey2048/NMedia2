@@ -4,17 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.model.AuthModel
 import ru.netology.nmedia.model.UserAuthResult
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.IOException
+import javax.inject.Inject
 
-
-class SignInViewModel : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val apiService: ApiService
+) : ViewModel() {
     val login: MutableLiveData<String> = MutableLiveData<String>()
     val pass: MutableLiveData<String> = MutableLiveData<String>()
 
@@ -26,22 +30,21 @@ class SignInViewModel : ViewModel() {
     val userAuthResult: LiveData<UserAuthResult>
         get() = _userAuthResult
 
-    fun signIn() = viewModelScope.launch{
+    fun signIn() = viewModelScope.launch {
         try {
-            val authResult = updateUser(login.value!!.toString().trim(), pass.value!!.toString().trim())
-            if(authResult != null){
-                _authState.value = authResult
-                _userAuthResult.value = UserAuthResult()
-            }
+            val authResult =
+                updateUser(login.value!!.toString().trim(), pass.value!!.toString().trim())
+            _authState.value = authResult
+            _userAuthResult.value = UserAuthResult()
         } catch (e: Exception) {
             _userAuthResult.value = UserAuthResult(error = true)
         }
     }
 
-    suspend fun updateUser(login: String, pass: String): AuthModel {
+    private suspend fun updateUser(login: String, pass: String): AuthModel {
         try {
 
-            val response = Api.retrofitService.updateUser(login, pass)
+            val response = apiService.updateUser(login, pass)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -53,3 +56,4 @@ class SignInViewModel : ViewModel() {
         }
     }
 }
+

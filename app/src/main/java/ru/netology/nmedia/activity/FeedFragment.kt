@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -24,10 +24,16 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.AuthModel
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
-    private val viewModel: PostViewModel by activityViewModels()
+    private val viewModel: PostViewModel by viewModels()
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
@@ -84,12 +90,12 @@ class FeedFragment : Fragment() {
 
                         R.id.signUp -> {
 //                    TODO("Not yet implemented")
-                            AppAuth.getInstance().setUser(AuthModel(5, "x-token"))
+                            appAuth.setUser(AuthModel(5, "x-token"))
                             true
                         }
 
                         R.id.signOut -> {
-                            AppAuth.getInstance().removeUser()
+                            appAuth.removeUser()
                             true
                         }
 

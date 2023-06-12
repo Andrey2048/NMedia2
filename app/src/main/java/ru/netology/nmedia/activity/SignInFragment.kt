@@ -8,20 +8,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentSignInBinding
 import ru.netology.nmedia.model.AuthModel
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.viewmodel.SignInViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private val viewModel: SignInViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
+    @Inject
+    lateinit var appAuth: AppAuth
+    private val viewModel: SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
+
+
 
         binding.signIn.setOnClickListener {
             AndroidUtils.hideKeyboard(requireView())
@@ -31,7 +39,7 @@ class SignInFragment : Fragment() {
         }
 
         viewModel.authState.observe(viewLifecycleOwner) { state ->
-            AppAuth.getInstance().setUser(AuthModel(state.id, state.token!!))
+            appAuth.setUser(AuthModel(state.id, state.token!!))
             findNavController().navigateUp()
         }
 
