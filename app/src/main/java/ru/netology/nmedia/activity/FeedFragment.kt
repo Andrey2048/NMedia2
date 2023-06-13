@@ -12,9 +12,11 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -26,6 +28,7 @@ import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
 
@@ -116,15 +119,16 @@ class FeedFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest { adapter.submitData(it) }
         }
 
-        viewModel.newerCount.observe(viewLifecycleOwner) {
-            println("new posts: $it")
-            if (it > 0) binding.newPosts.visibility = View.VISIBLE
-        }
+
+//        viewModel.newerCount.observe(viewLifecycleOwner) {
+//            println("new posts: $it")
+//            if (it > 0) binding.newPosts.visibility = View.VISIBLE
+//        }
 
         binding.newPosts.setOnClickListener {
             viewModel.makeVisible()
