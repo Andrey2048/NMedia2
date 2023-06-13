@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val auth: AppAuth): ViewModel() {
-    val authLiveData = auth
+    val data = auth
         .authStateFlow
         .asLiveData(Dispatchers.Default)
     val isAuthorized: Boolean

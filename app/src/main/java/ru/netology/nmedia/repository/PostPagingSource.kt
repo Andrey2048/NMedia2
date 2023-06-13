@@ -7,7 +7,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.error.ApiError
 
 class PostPagingSource (
-    private val service: ApiService,
+    private val apiService: ApiService,
 ) : PagingSource<Long, Post>() {
     override fun getRefreshKey(state: PagingState<Long, Post>): Long? {
         return null
@@ -16,13 +16,13 @@ class PostPagingSource (
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Post> {
         try {
             val response = when (params) {
-                is LoadParams.Refresh -> service.getLatest(params.loadSize)
+                is LoadParams.Refresh -> apiService.getLatest(params.loadSize)
                 is LoadParams.Prepend -> return LoadResult.Page(
                     data = emptyList(),
                     prevKey = params.key,
                     nextKey = null
                 )
-                is LoadParams.Append -> service.getBefore(params.key, params.loadSize)
+                is LoadParams.Append -> apiService.getBefore(params.key, params.loadSize)
             }
 
             if (!response.isSuccessful) {
