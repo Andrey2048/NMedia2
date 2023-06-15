@@ -1,9 +1,7 @@
 package ru.netology.nmedia.repository
 
+//import ru.netology.nmedia.api.Api
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.Api
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.AuthModel
@@ -18,9 +16,10 @@ interface PostRepository {
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun makeVisible()
     suspend fun saveWithAttachment(post: Post, file: File)
-    suspend fun upload(file: File): Media {
-        return Api.retrofitService.upload(MultipartBody.Part.createFormData("file", file.name, file.asRequestBody()))
-            .let { requireNotNull(it.body()) }
-    }
+//    suspend fun upload(file: File): Media {
+//        return Api.retrofitService.upload(MultipartBody.Part.createFormData("file", file.name, file.asRequestBody()))
+//            .let { requireNotNull(it.body()) }
+//    }
+    suspend fun upload(file: File): Media
     suspend fun updateUser(login: String, pass: String): AuthModel
 }
