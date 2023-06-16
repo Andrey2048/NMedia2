@@ -9,8 +9,7 @@ import ru.netology.nmedia.model.AuthModel
 import java.io.File
 
 interface PostRepository {
-//    val data: Flow<List<Post>>
-val data: Flow<PagingData<Post>>
+    val data: Flow<PagingData<Post>>
     suspend fun getAll()
     suspend fun likeById(post: Post)
     suspend fun save(post: Post)
@@ -18,10 +17,6 @@ val data: Flow<PagingData<Post>>
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun makeVisible()
     suspend fun saveWithAttachment(post: Post, file: File)
-//    suspend fun upload(file: File): Media {
-//        return Api.retrofitService.upload(MultipartBody.Part.createFormData("file", file.name, file.asRequestBody()))
-//            .let { requireNotNull(it.body()) }
-//    }
     suspend fun upload(file: File): Media
     suspend fun updateUser(login: String, pass: String): AuthModel
 }
