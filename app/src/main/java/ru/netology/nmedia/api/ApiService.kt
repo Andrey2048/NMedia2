@@ -14,7 +14,6 @@ import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.model.AuthModel
 
 
-
 interface ApiService {
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
@@ -24,6 +23,7 @@ interface ApiService {
 
     @GET("posts/{id}")
     suspend fun getById(@Path("id") id: Long): Response<Post>
+
 
     @POST("posts")
     suspend fun save(@Body post: Post): Response<Post>
