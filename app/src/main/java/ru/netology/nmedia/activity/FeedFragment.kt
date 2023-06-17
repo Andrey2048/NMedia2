@@ -12,9 +12,14 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -25,6 +30,7 @@ import ru.netology.nmedia.model.AuthModel
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
@@ -70,8 +76,8 @@ class FeedFragment : Fragment() {
         })
 
         var currentMenuProvider: MenuProvider? = null
-        authViewModel.authLiveData.observe(viewLifecycleOwner) { authModel ->
-            
+        authViewModel.data.observe(viewLifecycleOwner) { authModel ->
+
             currentMenuProvider?.let(requireActivity()::removeMenuProvider)
             requireActivity().addMenuProvider(/* provider = */ object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -116,15 +122,29 @@ class FeedFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
+
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.data.collectLatest {
+                    adapter.submitData(it)
+                }
+            }
         }
 
-        viewModel.newerCount.observe(viewLifecycleOwner) {
-            println("new posts: $it")
-            if (it > 0) binding.newPosts.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.data.observe(viewLifecycleOwner) {
+                    adapter.refresh()
+                }
+            }
+
         }
+
+//        viewModel.newerCount.observe(viewLifecycleOwner) {
+//            println("new posts: $it")
+//            if (it > 0) binding.newPosts.visibility = View.VISIBLE
+//        }
 
         binding.newPosts.setOnClickListener {
             viewModel.makeVisible()
