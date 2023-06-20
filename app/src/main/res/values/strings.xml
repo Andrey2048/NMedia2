@@ -41,5 +41,7 @@
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
     <string name="auth_error">Authentification Error</string>
+    <string name="ad_description">Advertaising Description</string>
+
 
 </resources>
