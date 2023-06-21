@@ -50,8 +50,7 @@ class PostRepositoryImpl @Inject constructor(
         pagingData.map(PostEntity::toDto)
             .insertSeparators { previous, _ ->
                 if (previous?.id?.rem(5) == 0L) {
-                    Ad(25L, "figma.jpg")
-//                    Ad(kotlin.random.Random.nextLong(), "figma1.jpg")
+                    Ad(kotlin.random.Random.nextLong(), "figma.jpg")
 
                 } else null
             }

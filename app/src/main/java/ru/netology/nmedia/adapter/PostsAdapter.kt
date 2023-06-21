@@ -31,9 +31,7 @@ interface OnInteractionListener {
 }
 
 
-//class PostsAdapter(
-//    private val onInteractionListener: OnInteractionListener,
-//) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
+
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener,
 ) : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
@@ -81,13 +79,10 @@ class AdViewHolder(
     binding.root
 ) {
     fun bind(ad: Ad) {
-        println("start figma")
         Glide.with(binding.image)
             .load(BASE_URL + "/media/${ad.image}")
             .timeout(10_000)
             .into(binding.image)
-        println("figma")
-
     }
 }
 

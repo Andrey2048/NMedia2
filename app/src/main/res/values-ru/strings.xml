@@ -42,4 +42,5 @@
     <string name="signin">Войти</string>
     <string name="signup">Зарегистрироваться</string>
     <string name="auth_error">Ошибка аутентификации</string>
+    <string name="ad_description">Рекламный блок</string>
 </resources>

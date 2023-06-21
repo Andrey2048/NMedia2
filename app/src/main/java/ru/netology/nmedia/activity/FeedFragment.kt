@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -113,8 +114,8 @@ class FeedFragment : Fragment() {
 
         }
         binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = PostLoadingStateAdapter{adapter.retry()},
-            footer = PostLoadingStateAdapter{adapter.retry()},
+            header = PostLoadingStateAdapter { adapter.retry() },
+            footer = PostLoadingStateAdapter { adapter.retry() },
         )
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
@@ -145,6 +146,15 @@ class FeedFragment : Fragment() {
 
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                adapter.loadStateFlow.collectLatest { state ->
+                    binding.swiperefresh.isRefreshing = state.refresh is LoadState.Loading
+                }
+            }
+        }
+
+
 //        viewModel.newerCount.observe(viewLifecycleOwner) {
 //            println("new posts: $it")
 //            if (it > 0) binding.newPosts.visibility = View.VISIBLE
@@ -161,7 +171,8 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
         binding.swiperefresh.setOnRefreshListener {
-            viewModel.refreshPosts()
+//            viewModel.refreshPosts()
+            adapter.refresh()
         }
         return binding.root
     }
