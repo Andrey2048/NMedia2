@@ -3,8 +3,13 @@ package ru.netology.nmedia.dto
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
+sealed interface FeedItem {
+    val id: Long
+}
+
+
 data class Post(
-    val id: Long,
+    override val id: Long,
     val author: String,
     val authorAvatar: String,
     val authorId: Long,
@@ -14,8 +19,12 @@ data class Post(
     var likes: Int = 0,
     val attachment: PostAttachment?,
     val ownedByMe: Boolean = false
-)
+) : FeedItem
 
+data class Ad(
+    override val id: Long,
+    val image: String,
+) : FeedItem
 
 fun countView(n: Int): String {
     var df = DecimalFormat("#.#K")
@@ -28,6 +37,7 @@ fun countView(n: Int): String {
             df.roundingMode = RoundingMode.DOWN
             df.format(n / 1_000.0)
         }
+
         else -> {
             df = DecimalFormat("#.#M")
             df.roundingMode = RoundingMode.DOWN
@@ -41,6 +51,7 @@ data class PostAttachment(
     val url: String,
     val type: AttachmentType
 )
-enum class AttachmentType{
+
+enum class AttachmentType {
     IMAGE
 }
